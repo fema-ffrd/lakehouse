@@ -1,0 +1,49 @@
+services:
+
+  # Postgres with pg_duckdb extension
+  postgres:
+    image: pgduckdb/pgduckdb:17-main
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # backend 
+  nimtable:
+    image: ghcr.io/nimtable/nimtable:nightly
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8182:8182"
+    environment:
+      JAVA_OPTS: ${JAVA_OPTS}
+    volumes:
+      - ./nimtable-config.yaml:/nimtable/config.yaml
+
+  # frontend
+  nimtable-web:
+    image: ghcr.io/nimtable/nimtable-web:nightly
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Backend API URL (talks to the nimtable backend service)
+      - JAVA_API_URL=${JAVA_API_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    depends_on:
+      - nimtable
+      - postgres
