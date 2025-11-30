@@ -1,4 +1,4 @@
--- Create databases
+-- Create Nimtable database
 CREATE DATABASE nimtable;
 
 -- Create Nimtable user and grant access to its DB

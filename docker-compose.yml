@@ -6,6 +6,9 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -38,12 +41,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # Backend API URL (talks to the nimtable backend service)
       - JAVA_API_URL=${JAVA_API_URL}
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
-      - ADMIN_USERNAME=${ADMIN_USERNAME}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_USERNAME=${NIMTABLE_ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${NIMTABLE_ADMIN_PASSWORD}
     depends_on:
       - nimtable
       - postgres

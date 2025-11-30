@@ -1,0 +1,13 @@
+server:
+  port: 8182
+  host: 0.0.0.0
+
+database:
+  url: jdbc:postgresql://postgres:5432/nimtable
+  username: nimtable_user
+  password: password
+
+# database reference
+#   url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${NIMTABLE_DB}
+#   username: ${NIMTABLE_DB_USER}
+#   password: ${NIMTABLE_DB_PASSWORD}
