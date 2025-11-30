@@ -1,0 +1,80 @@
+{
+  "table_properties": {
+    "hydraulics.schema.version": "1.0.0",
+    "hydraulics.description": "HEC-RAS simulation outputs",
+    "hydraulics.units.convention": "English",
+    "hydraulic.model.version": "6.6",
+    "hydraulics.stac.catalog": "s3://trinity-pilot/stac/hydraulics/catalog.json",
+    "write.hive-style-partitioning": "true",
+    "write.target-file-size-bytes": "536870912"
+  },
+  "fields": [
+    {
+      "name": "sim_time",
+      "type": "timestamp[us]",
+      "nullable": false,
+      "metadata": {
+        "unit": "UTC",
+        "description": "Simulation timestamp from HEC-RAS model"
+      }
+    },
+    {
+      "name": "realization_id",
+      "type": "int32",
+      "nullable": false,
+      "metadata": {
+        "description": "Unique identifier for each model realization"
+      }
+    },
+    {
+      "name": "model_id",
+      "type": "string",
+      "nullable": false,
+      "metadata": {
+        "description": "Identifier for the HEC-RAS model"
+      }
+    },
+    {
+      "name": "site_id",
+      "type": "string",
+      "nullable": false,
+      "metadata": {
+        "description": "Identifier for the measurement site"
+      }
+    },
+    {
+      "name": "event_id",
+      "type": "int32",
+      "nullable": false,
+      "metadata": {
+        "description": "Identifier for the simulated event"
+      }
+    },
+    {
+      "name": "run_version",
+      "type": "string",
+      "nullable": false,
+      "metadata": {
+        "description": "Version of the model run"
+      }
+    },
+    {
+      "name": "flow",
+      "type": "float64",
+      "nullable": true,
+      "metadata": {
+        "unit": "cfs",
+        "description": "Discharge at the site"
+      }
+    },
+    {
+      "name": "stage",
+      "type": "float64",
+      "nullable": true,
+      "metadata": {
+        "unit": "ft",
+        "description": "Stage at the site"
+      }
+    }
+  ]
+}
