@@ -86,7 +86,7 @@ Structured types (struct, list, map) can also be added in the future if needed.
 """
 
 import json
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 
 import pyarrow as pa
 from pyiceberg.partitioning import PartitionField, PartitionSpec
@@ -206,7 +206,11 @@ def json_to_arrow(json_schema_path: str) -> pa.Schema:
 
 
 def arrow_to_json(schema: pa.Schema, json_path: str) -> None:
-    """Convert a PyArrow schema to a JSON schema file (fields only)."""
+    """Convert a PyArrow schema to a JSON schema file (fields only).
+
+    Note: this only writes the `fields` section; table_properties and keys
+    are not reconstructed from a PyArrow schema.
+    """
     fields = []
     for f in schema:
         type_name = _arrow_type_name(f.type)
@@ -228,7 +232,12 @@ def arrow_to_json(schema: pa.Schema, json_path: str) -> None:
 
 
 def arrow_to_iceberg(schema: pa.Schema) -> Schema:
-    """Convert a PyArrow schema to an Iceberg schema."""
+    """Convert a PyArrow schema to an Iceberg schema.
+
+    This conversion does NOT set identifier_field_ids, because PyArrow
+    does not carry key information. Use `json_to_iceberg` if you want
+    keys to become identifier fields.
+    """
     fields = []
     for idx, field in enumerate(schema, start=1):
         type_name = _arrow_type_name(field.type)
@@ -270,8 +279,11 @@ def _dict_to_iceberg(schema_dict: dict) -> Schema:
     Uses:
         - "fields" for types/nullability
         - per-field "metadata" (if present) to populate the Iceberg field doc
+        - optional top-level "keys": [...] to set identifier_field_ids
     """
     fields = []
+    name_to_id: Dict[str, int] = {}
+
     for idx, field in enumerate(schema_dict["fields"], start=1):
         type_name = field["type"]
         if type_name not in TYPE_REGISTRY:
@@ -281,21 +293,35 @@ def _dict_to_iceberg(schema_dict: dict) -> Schema:
         metadata = field.get("metadata") or {}
         doc = _build_doc_from_metadata(metadata)
 
+        name = field["name"]
+        name_to_id[name] = idx
+
         fields.append(
             NestedField(
                 field_id=idx,
-                name=field["name"],
+                name=name,
                 field_type=iceberg_type,
                 required=not field["nullable"],
                 doc=doc,
             )
         )
 
-    return Schema(*fields)
+    # Optional keys -> identifier field IDs
+    keys = schema_dict.get("keys") or []
+    identifier_ids = []
+    for key_name in keys:
+        if key_name not in name_to_id:
+            raise KeyError(f"Key '{key_name}' not found in fields")
+        identifier_ids.append(name_to_id[key_name])
+
+    if identifier_ids:
+        return Schema(*fields, identifier_field_ids=identifier_ids)
+    else:
+        return Schema(*fields)
 
 
 def json_to_iceberg(json_schema_path: str) -> Schema:
-    """Convert a JSON schema file to an Iceberg schema (fields + docs)."""
+    """Convert a JSON schema file to an Iceberg schema (fields + docs + keys)."""
     schema_dict = _load_schema_config(json_schema_path)
     return _dict_to_iceberg(schema_dict)
 
@@ -330,6 +356,12 @@ def load_iceberg_schema_and_properties(
             table_props[f"{field_prefix}{name}.{key}"] = str(value)
 
     return schema, table_props
+
+
+def get_table_keys(json_schema_path: str) -> List[str]:
+    """Return the list of logical table keys from a JSON schema file, if present."""
+    cfg = _load_schema_config(json_schema_path)
+    return list(cfg.get("keys", []))
 
 
 # ---------------------------------------------------------------------------
@@ -368,3 +400,56 @@ def auto_partition_spec(schema: Schema, fields: list, next_id: int = 100) -> Par
         next_id += 1
 
     return PartitionSpec(*spec_fields)
+
+
+import pandas as pd
+import pyarrow as pa
+from pyiceberg.expressions import And, EqualTo
+
+key_cols = [
+    "sim_time",
+    "realization_id",
+    "model_id",
+    "site_id",
+    "event_id",
+    "run_version",
+]
+
+# ---------------------------------------------------------------------------
+# Managing Upserts by Fetching Existing Data
+# ---------------------------------------------------------------------------
+
+
+def fetch_existing_data_for_keys(table, df_keys: pd.DataFrame, field: str = "flow") -> pd.DataFrame:
+    """Fetch existing rows from Iceberg for given keys, but only needed columns."""
+    frames = []
+
+    # Example batching by event_id to avoid huge expressions
+    for event_id, group in df_keys.groupby("event_id"):
+        # Optionally also batch further by site_id if needed
+        # Build an expression: event_id = X
+        expr = EqualTo("event_id", int(event_id))
+
+        scan = table.scan(row_filter=expr).select(
+            "sim_time", "realization_id", "model_id", "site_id", "event_id", "run_version", field
+        )
+
+        arrow_tbl = scan.to_arrow()
+        if arrow_tbl.num_rows == 0:
+            continue
+
+        frames.append(arrow_tbl.to_pandas())
+
+    if not frames:
+        return pd.DataFrame(columns=key_cols + [field])
+
+    existing_df = pd.concat(frames, ignore_index=True)
+
+    # Keep only keys we actually care about (inner join)
+    existing_df = existing_df.merge(
+        df_keys[key_cols].drop_duplicates(),
+        on=key_cols,
+        how="inner",
+    )
+
+    return existing_df
