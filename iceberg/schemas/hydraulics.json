@@ -7,7 +7,16 @@
     "hydraulics.stac.catalog": "s3://trinity-pilot/stac/hydraulics/catalog.json",
     "write.hive-style-partitioning": "true",
     "write.target-file-size-bytes": "536870912"
+    
   },
+  "keys": [
+    "sim_time",
+    "realization_id",
+    "model_id",
+    "site_id",
+    "event_id",
+    "run_version"
+  ],
   "fields": [
     {
       "name": "sim_time",
