@@ -1,0 +1,105 @@
+{
+    "table_properties": {
+        "models.schema.version": "1.0.0",
+        "models.description": "HEC-HMS",
+        "models.units.convention": "English",
+        "models.model.version": "4.13",
+        "models.stac.catalog": "s3://trinity-pilot/stac/models/catalog.json",
+        "write.hive-style-partitioning": "true",
+        "write.target-file-size-bytes": "536870912"
+    },
+    "keys": [
+        "donor_model_id",
+        "donor_model_type",
+        "donor_model_version",
+        "donor_site_id",
+        "donor_site_type",
+        "receiver_model_id",
+        "receiver_model_type",
+        "receiver_model_version",
+        "receiver_site_id",
+        "receiver_site_type"
+    ],
+    "fields": [
+        {
+            "name": "donor_model_id",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Identifier for the donor model"
+            }
+        },
+        {
+            "name": "donor_model_type",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Type of the donor model"
+            }
+        },
+        {
+            "name": "donor_model_version",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Version of the donor model"
+            }
+        },
+        {
+            "name": "donor_site_type",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Type of the donor site"
+            }
+        },
+        {
+            "name": "donor_site_id",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Identifier for the donor site"
+            }
+        },
+        {
+            "name": "receiver_model_id",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Identifier for the receiver model"
+            }
+        },
+        {
+            "name": "receiver_model_type",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Type of the receiver model"
+            }
+        },
+        {
+            "name": "receiver_model_version",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Version of the receiver model"
+            }
+        },
+        {
+            "name": "receiver_site_type",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Type of the receiver site"
+            }
+        },
+        {
+            "name": "receiver_site_id",
+            "type": "string",
+            "nullable": false,
+            "metadata": {
+                "description": "Identifier for the receiver site"
+            }
+        }
+    ]
+}
