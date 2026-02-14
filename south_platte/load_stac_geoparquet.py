@@ -215,13 +215,13 @@ def main(input_parquet_file: str, config: dict):
     )
 
     # Create the stac table for STAC items
-    new_stac_table(input_parquet_file, catalog, catalog_root_path, "storms", "stac")
+    new_stac_table(input_parquet_file, catalog, catalog_root_path, "gages", "stac")
 
 
 if __name__ == "__main__":
-    CONFIG_FILE = os.path.join(os.getcwd(), "trinity/configs/storm-catalog.config.json")
+    CONFIG_FILE = os.path.join(os.getcwd(), "south_platte/configs/gage-catalog.config.json")
     load_dotenv()
     ensure_env_variables()
     config = load_config(CONFIG_FILE)
-    input_parquet_file = "s3://trinity-pilot/stac/stormlit/storms-db/72hr-events/all_items_geopq_v3.parquet"
+    input_parquet_file = "s3://south-platte/stac/gages/gages/gages_all_items_geopq.parquet"
     main(input_parquet_file, config)
