@@ -1,0 +1,123 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "5",
+  "properties": {
+    "aorc:max_precip_location": {
+      "latitude": 29.5913,
+      "longitude": -95.5514
+    },
+    "aorc:statistics": {
+      "max": 39.64,
+      "mean": 6.94,
+      "min": 0.0,
+      "units": "inches"
+    },
+    "aorc:transform": {
+      "a": 1.0,
+      "b": 0.0,
+      "c": -0.5833099999995284,
+      "d": 0.0,
+      "e": 1.0,
+      "f": -0.8249669999999999
+    },
+    "storm_type": "Tropical cyclone",
+    "start_datetime": "2017-08-26T00:00:00.000000Z",
+    "end_datetime": "2017-08-29T00:00:00.000000Z",
+    "datetime": "2017-08-26T00:00:00Z",
+    "cube:dimensions": {
+      "time": {
+        "type": "temporal"
+      },
+      "y": {
+        "type": "spatial"
+      },
+      "x": {
+        "type": "spatial"
+      }
+    }
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -97.10282698191557,
+      31.420315340601174
+    ]
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "s3://trinity-pilot/stac/stormlit/storms-db/catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "s3://trinity-pilot/stac/stormlit/storms-db/72hr-events/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "s3://trinity-pilot/stac/stormlit/storms-db/72hr-events/5/5.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "s3://trinity-pilot/stac/stormlit/storms-db/72hr-events/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "derived_from",
+      "href": "s3://noaa-nws-aorc-v1-1-1km/2017.zarr",
+      "type": "application/vnd+zarr",
+      "title": "NOAA AORC v1.1.1 1km (2017 Zarr store)"
+    }
+  ],
+  "assets": {
+    "thumbnail": {
+      "href": "s3://trinity-pilot/stac/stormlit/storms-db/72hr-events/5.thumbnail.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "aorc_storm": {
+      "href": "s3://trinity-pilot/test/trinity-storms.icechunk/",
+      "type": "application/vnd.zarr; version=2",
+      "title": "AORC storm variables",
+      "description": "AORC precipitation and temperature for this storm stored as Icechunk/Zarr",
+      "trinity:storm_index": 4,
+      "trinity:storm_id": 5,
+      "trinity:icechunk_branch": "main",
+      "trinity:icechunk_snapshot": null,
+      "eo:bands": [
+        {
+          "name": "APCP_surface",
+          "description": "Total precipitation",
+          "unit": "kg/m^2"
+        },
+        {
+          "name": "TMP_2maboveground",
+          "description": "2m air temperature",
+          "unit": "K"
+        }
+      ],
+      "roles": [
+        "data",
+        "zarr"
+      ]
+    }
+  },
+  "bbox": [
+    -99.3220605000248,
+    28.920476499999996,
+    -81.78942850003898,
+    35.82020049999999
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/storage/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json"
+  ],
+  "collection": "72hr-events"
+}
