@@ -1,0 +1,144 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "06693800",
+  "properties": {
+    "site_no": "06693800",
+    "station_nm": "MOSQUITO CREEK NEAR ALMA, CO",
+    "huc_cd": "10190001",
+    "drain_area_va": 16.2,
+    "daily_values": {
+      "begin_date": "1998-10-01",
+      "end_date": "2004-09-29"
+    },
+    "site_retrieved": "2026-01-07T13:30:30.474797",
+    "start_datetime": "1998-10-01T00:00:00Z",
+    "end_datetime": "2004-09-29T00:00:00Z",
+    "datetime": "2026-01-07T13:30:30.829747Z"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -106.0511297,
+      39.2699896
+    ]
+  },
+  "links": [
+    {
+      "rel": "via",
+      "href": "https://waterdata.usgs.gov/nwis/inventory/?site_no=06693800",
+      "title": "USGS NWIS Site Information"
+    },
+    {
+      "rel": "root",
+      "href": "s3://south-platte/stac/gages/catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "s3://south-platte/stac/gages/gages/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "s3://south-platte/stac/gages/gages/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "s3://south-platte/stac/gages/gages/collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "flow_stats": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-flow-stats.pq",
+      "type": "application/x-parquet",
+      "roles": [
+        "data"
+      ]
+    },
+    "flow_statistics_plot": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-flow-stats.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "annual_maxima_series": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-ams.pq",
+      "type": "application/x-parquet",
+      "file:values": [
+        {
+          "return_period": "2",
+          "discharge_CFS_(Approximate)": 128
+        },
+        {
+          "return_period": "5",
+          "discharge_CFS_(Approximate)": 193
+        },
+        {
+          "return_period": "10",
+          "discharge_CFS_(Approximate)": 228
+        },
+        {
+          "return_period": "25",
+          "discharge_CFS_(Approximate)": 262
+        },
+        {
+          "return_period": "50",
+          "discharge_CFS_(Approximate)": 282
+        },
+        {
+          "return_period": "100",
+          "discharge_CFS_(Approximate)": 299
+        },
+        {
+          "return_period": "500",
+          "discharge_CFS_(Approximate)": 326
+        }
+      ],
+      "roles": [
+        "data"
+      ]
+    },
+    "ams_plot": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-ams.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "ams_seasons_plot": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-ams-seasonal.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "ams_LPIII_plot": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/06693800-ams-lpiii.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "avg_ams_swe": {
+      "href": "s3://south-platte/stac/gages/gages/06693800/avg_ams_swe_06693800.pq",
+      "type": "application/parquet",
+      "title": "Average SWE",
+      "description": "Average daily SWE over gage drainage area per AMS Event",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "bbox": [
+    -106.0511297,
+    39.2699896,
+    -106.0511297,
+    39.2699896
+  ],
+  "stac_extensions": [],
+  "collection": "gages"
+}

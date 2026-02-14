@@ -1,0 +1,5 @@
+{
+    "catalog_name": "stormlit_dev",
+    "warehouse_prefix": "warehouse",
+    "s3_bucket": "south-platte"
+}
