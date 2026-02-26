@@ -219,7 +219,7 @@ def main(input_parquet_file: str, config: dict):
 
 
 if __name__ == "__main__":
-    CONFIG_FILE = os.path.join(os.getcwd(), "trinity/configs/storm-catalog.config.json")
+    CONFIG_FILE = os.path.join(os.getcwd(), "lakehouse/trinity/configs/storm-catalog.config.json")
     load_dotenv()
     ensure_env_variables()
     config = load_config(CONFIG_FILE)

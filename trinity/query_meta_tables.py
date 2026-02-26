@@ -51,7 +51,7 @@ def get_iceberg_metadata(con, pg_str, table_name="storms"):
             SELECT *
             FROM postgres_scan(
                 '{pg_str}',
-                'public',
+                'pgstac',
                 'iceberg_tables'
             )
             WHERE table_name = '{table_name}'
